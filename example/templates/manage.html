@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Managing</title>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="/index">Upload</a></li>
+            <li><a href="/manage">Manage</a></li>
+            <li><a href="/matching">Matching</a></li>
+            <li><a href="/result">Result</a></li>
+        </ul>
+    </nav>
+    <div id="files_list">
+
+      {% for file  in files_list %}
+      - {{  file }}
+      <a href="{{ url_for('open_file', filename=file) }}">open</a>
+      <a href="{{ url_for('delete_file', filename=file) }}">del</a><br>
+      {% endfor %}
+      {% if files_list.__len__() == 0  %}
+        <p>There are nothing.</p>
+      {% endif %}
+
+    </div>
+    <div id="overview">
+      {% if overview %}
+        <p>{{overview}}</p>
+      {% endif %}
+    </div>
+
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class=flashes>
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+</body>
+</html>

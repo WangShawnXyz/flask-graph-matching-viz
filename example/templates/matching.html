@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Flask-Dropzone Demo</title>
+  <style type="text/css">
+        nav {
+            background-color: #666;
+        }
+        nav ul li {
+            text-decoration: none;
+        }
+  </style>
+</head>
+<body>
+    <nav>
+        <ul>
+            <li><a href="{{url_for('index')}}">Upload</a></li>
+            <li><a href="/manage">Manage</a></li>
+            <li><a href="/matching">Matching</a></li>
+            <li><a href="/result">Result</a></li>
+        </ul>
+    </nav>
+    <div>
+      <form method="post" name="select_file">
+        <table border="0">
+          <tr>
+            <td>GraphA:</td>
+            <td>
+              <select name="graphA">
+                {% for file  in files_list %}
+                  <option value="{{file}}">{{file}}</option>
+                {% endfor %}
+                {% if files_list.__len__() == 0  %}
+                  <option value="None">Please Upload Your Graph File!</option>
+                {% endif %}
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td>GraphB:</td>
+            <td>
+              <select name="graphB">
+                {% for file  in files_list %}
+                  <option value="{{file}}">{{file}}</option>
+                {% endfor %}
+                {% if files_list.__len__() == 0  %}
+                  <option value="None">Please Upload Your Graph File!</option>
+                {% endif %}
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td colspan="2" align="center">
+              <input type="submit" name="submit" value="Start Matching" />
+            </td>
+          </tr>
+        </table>
+      </form>
+    </div>
+</body>
+</html>
