@@ -13,16 +13,19 @@ app.config.update(
     DROPZONE_MAX_FILE_SIZE=20,
     DROPZONE_INPUT_NAME='text',
     DROPZONE_MAX_FILES=30,
-    SECRET_KEY='I have a dream'
+    SECRET_KEY='I have a dream',
+    EXE_PATH='../GMALine'
 )
-
-@app.route('/index', methods=['POST', 'GET'])
-@app.route('/', methods=['POST', 'GET'])
+@app.route('/index')
 def index():
+    return render_template("index.html", title="Index")
+@app.route('/upload', methods=['POST', 'GET'])
+@app.route('/', methods=['POST', 'GET'])
+def upload():
     if request.method == 'POST':
         f = request.files.get('text')
         f.save(os.path.join(app.config['UPLOADED_PATH'], f.filename))
-    return render_template('index.html')
+    return render_template('upload.html')
 
 @app.route('/manage')
 def manage():

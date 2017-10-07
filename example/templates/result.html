@@ -1,122 +1,53 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Index</title>
-    <link rel="stylesheet" type="text/css" href="./static/css/style.css">
-    <style type="text/css">
-        /* cytoscape graph */
-        #cy {
-            left: 5%;
-            width: 90%;
-            height: 400px;
-            background-color: #f9f9f9;
-        }
-        #cc {
-            left: 5%;
-            width: 90%;
-            height: 400px;
-            background-color: #f9f9f9;
-        }
-    </style>
-    <script src="./static/js/cytoscape.min.js"></script>
-    <script src="./static/js/jquery-3.2.1.min.js"></script>
-    <script type="text/javascript">
-        // $(function() {
-        //     $.get('/graph',function(result) {
-                
-        //     } ,'json');
-        //     cytoscape({
-        //         container:document.getElementById('cy'),
-        //         style:  [
-        //         { selector: 'node', 
-        //           css: {'background-color': '#6FB1FC', 'content': 'data(id)'}
-        //         },
-        //         { selector: 'edge', 
-        //           css: {'target-arrow-shape': 'none'}
-        //         }        
-        //       ], 
-        //       elements: {
-        //         nodes: [
-        //           {data: {id: '172'}},
-        //           {data: {id: '183'}}
-        //         ],
-        //         edges: [{data: {source: '172', target: '183'}}]
-        //       },
-        //       layout: { name: 'grid'} 
-        //     });
-        // });
+{% extends "base.html"%}
+{% block content %}
+    <div id="files_list">
 
+      {% for file  in files_list %}
+      - {{  file }}
+      <a href="{{ url_for('open_file', filename=file) }}">open</a>
+      <a href="{{ url_for('download_file', filename=file) }}">download</a>
+      <a href="{{ url_for('delete_file', filename=file) }}">del</a><br>
+      {% endfor %}
+      {% if files_list.__len__() == 0  %}
+        <p>It seems Not matching done.</p>
+      {% endif %}
 
-         $(function(){
-          $.get('/graph', function(result) {
-            var style = [
-              { selector: 'node', css: {'background-color': '#6FB1FC'}},
-              { selector: 'node[type="matched"]', css: {'background-color': '#FF0000', content:'data(id)'}},
-              { selector: 'edge', css: {'background-color': '#6FB1FC'}},
-              { selector: 'edge[type = "matched"]', 
-                  css: {'line-color': 'red', 'line-style': 'dashed'}
-                },
-            ];
+    </div>
+    <div id="detail">
+      {% if detail %}
+        <table>
+          <tr>
+            <td>size:</td>
+            <td> {{ detail["size"] }} </td>
+          </tr>
+          <tr>
+            <td>create time:</td>
+            <td> {{ detail["ctime"] }} </td>
+          </tr>
+          <tr>
+            <td>access time:</td>
+            <td> {{ detail["atime"] }} </td>
+          </tr>
+          <tr>
+            <td>modify time:</td>
+            <td> {{ detail["atime"] }} </td>
+          </tr>
+        </table>
+      {% endif %}
+    </div>
+    <div id="overview">
+      {% if overview %}
+        <p>{{overview}}</p>
+      {% endif %}
+    </div>
 
-            var cy = cytoscape({
-              container: document.getElementById('cy'),
-              style: style,
-              layout: { name: 'cose', fit: true },      
-              elements: result.elements
-            });
-          }, 'json');  
-        });   
-    </script>
-    <script type="text/javascript">
-        // $(function() {
-        //     $.get('/graph',function(result) {
-                
-        //     } ,'json');
-        //     cytoscape({
-        //         container:document.getElementById('cy'),
-        //         style:  [
-        //         { selector: 'node', 
-        //           css: {'background-color': '#6FB1FC', 'content': 'data(id)'}
-        //         },
-        //         { selector: 'edge', 
-        //           css: {'target-arrow-shape': 'none'}
-        //         }        
-        //       ], 
-        //       elements: {
-        //         nodes: [
-        //           {data: {id: '172'}},
-        //           {data: {id: '183'}}
-        //         ],
-        //         edges: [{data: {source: '172', target: '183'}}]
-        //       },
-        //       layout: { name: 'grid'} 
-        //     });
-        // });
-
-
-         $(function(){
-          $.get('/graph/graphA/match', function(result) {
-            var style = [
-              { selector: 'node', css: {'background-color': '#6FB1FC'}},
-              { selector: 'node[type="matched"]', css: {'background-color': '#FF0000', content:'data(id)'}},
-              { selector: 'edge', css: {'background-color': '#6FB1FC'}},
-              { selector: 'edge[type = "matched"]', 
-                  css: {'line-color': 'red', 'line-style': 'dashed'}
-                },
-            ];
-
-            var cy = cytoscape({
-              container: document.getElementById('cc'),
-              style: style,
-              layout: { name: 'cose', fit: true },      
-              elements: result.elements
-            });
-          }, 'json');  
-        });   
-    </script>
-</head>
-<body>
-    <div id="cy"></div>
-    <div id="cc"></div>
-</body>
-</html>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+    <ul class="flashes">
+    {% for message in messages %}
+      <li>{{ message }}</li>
+    {% endfor %}
+    </ul>
+  {% endif %}
+{% endwith %}
+{% endblock %}

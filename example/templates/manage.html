@@ -1,18 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>Managing</title>
-</head>
-<body>
-    <nav>
-        <ul>
-            <li><a href="/index">Upload</a></li>
-            <li><a href="/manage">Manage</a></li>
-            <li><a href="/matching">Matching</a></li>
-            <li><a href="/result">Result</a></li>
-        </ul>
-    </nav>
+{% extends "base.html"%}
+{% block content %}
     <div id="files_list">
 
       {% for file  in files_list %}
@@ -40,5 +27,4 @@
     </ul>
   {% endif %}
 {% endwith %}
-</body>
-</html>
+{% endblock %}

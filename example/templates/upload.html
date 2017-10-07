@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block head %}
+  {{ dropzone.load() }}
+  {{ dropzone.style('border: 2px dashed #0087F7; margin: 10%; min-height: 400px;') }}
+{% endblock %}
+{% block content %}
+    <div id="dropzone">
+        {{ dropzone.create(action_view='index') }}
+    </div>
+{% endblock %}
