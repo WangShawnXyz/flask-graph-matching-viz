@@ -77,7 +77,7 @@ def test(source, match):
                         break
                     else:
                         match_edges.add(tuple(mpair))
-                m.seek(0, os.SEEK_SET)  #这个坑太大了， 将文件指针置为开始位置
+                m.seek(0, os.SEEK_SET)  #将文件指针置为开始位置
     common_nodes = in_source & in_match
     unsoure_nodes = in_match - in_source
     print(len(in_source - common_nodes)) 
@@ -88,6 +88,79 @@ def test(source, match):
     __log('Ltest.txt', "common_nodes:\n"+str(common_nodes)+"\n")
     __log('Ltest.txt', "common_edges:\n"+str(common_edges)+"\n")
     __log('Ltest.txt', "match_edges:\n"+str(match_edges)+"\n")
+def __get_graph(path, category):
+    nodes = set()
+    edges = list()
+    with open(path) as f:
+        for line in f:
+            splits = line.split()
+            if len(splits) == 2:
+                nodes.add(splits[0])
+                nodes.add(splits[1])
+                edges.append({"source":splits[0], "target":splits[1]})
+    dict_nodes = []
+    lable = 0
+    if category == "GraphB":
+        lable = 1
+    for node in nodes:
+        '''
+        {
+            "name": "AnalyserNode",
+            "value": 1,
+            "category": 4
+        },
+
+        '''
+        dict_nodes.append({"name":category, "value":node, "category":lable})
+    return (list(dict_nodes), edges)
+
+def __get_sim(match):
+    edges = []
+    with open(match) as f:
+        for line in f:
+            splits = line.split()
+            if len(splits) == 2:
+                edges.append({"source":splits[0], "target":splits[1]})
+    return edges
+def gen_json(fileA, fileB, match):
+    # a_node = set()
+    # b_node = set()
+    # a_edges = list()
+    # b_edges = list()
+    # matched_edges = list()
+
+
+    nodes = []
+    edges = []
+    ga = __get_graph(fileA, "GraphA")
+    gb = __get_graph(fileA, "GraphB")
+    em = __get_sim(match)
+    nodes = ga[0] + gb[0]
+    edges = ga[1] + gb[1] + em
+    my_json =  {
+    "type": "force",
+    "categories": [
+        {
+            "name": "GraphA",
+            "keyword": {},
+            "base": "GraphA"
+        },
+        {
+            "name": "GraphB",
+            "keyword": {},
+            "base": "GraphB"
+        },
+        {
+            "name": "GraphA & GraphB",
+            "keyword": {},
+            "base": "GraphB"
+        }
+    ],
+    "nodes": nodes,
+    "links": edges
+    }
+    return my_json
+
 
 
 def __log(doc, content):
@@ -105,7 +178,7 @@ if __name__ == '__main__':
     #     f.write(s)
     # print(s[:100])
 
-    test("./data/graphA.txt", "./data/match.txt")
+    # test("./data/graphA.txt", "./data/match.txt")
     # test("./data/myA.txt", "./data/mymatch.txt")
-
+    print(gen_json("./data/graphA.txt", "./data/graphB.txt", "./data/match.txt"))
     pass

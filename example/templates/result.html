@@ -12,7 +12,8 @@
       <a href="{{ url_for('view', filename=file) }}">view</a>
       <a href="{{ url_for('download', filename=file) }}">download</a>
       {% endfor %}
-      {% if files_list.__len__() == 0  %}
+
+      {% if not request.cookies.get("worked_dir") and files_list.__len__() == 0  %}
         <p>It seems Not matching done.</p>
       {% endif %}
 

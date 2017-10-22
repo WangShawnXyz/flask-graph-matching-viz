@@ -1,0 +1,35 @@
+
+
+dir: . 
+Load graph: .\graphA.txt 
+# of nodes: 1911		# of edges: 4711 
+Load graph: .\graphB.txt 
+# of nodes: 4370		# of edges: 9116 
+selection time = 1426.017 sec
+
+Match result : 
+The best anchor selection thresh: 0.980000 
+ The max num of selected anchor: 3 
+expansion time = 210.256 sec
+construction phase: match edge = 1760 
+refinement phase: matched edge = 2502
+refinement time = 272.921 sec
+Load graph: .\graphA.txt 
+# of nodes: 1911		# of edges: 4711 
+Load graph: .\graphB.txt 
+# of nodes: 4370		# of edges: 9116 
+EC = 53.11 %
+
+Load graph: .\graphA.txt 
+# of nodes: 1911		# of edges: 4711 
+Load graph: .\graphB.txt 
+# of nodes: 4370		# of edges: 9116 
+symmetric sub-structure score(S3) = 32.81%
+
+Load graph: .\graphA.txt 
+# of nodes: 1911		# of edges: 4711 
+Load graph: .\graphB.txt 
+# of nodes: 4370		# of edges: 9116 
+计算LCC时两张图最大连通子图LCC的顶点数 = 1604
+计算LCC时两张图最大连通子图LCC的边数 = 2300
+Largest Connected Component(LCC) = 83.94%

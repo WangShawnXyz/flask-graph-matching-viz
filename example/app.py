@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 
-
 import os
 import graph as g
 from flask import Flask, render_template, request, flash, jsonify
@@ -24,19 +23,34 @@ app.config.update(
     RESULT_DIR=os.getcwd()+'/RESULT'
 )
 
+
 def __gen_txt_md5(path):
     '''
         生成文件的md5
     '''
-    md5 = str(random.randint(1000, 9999))
+    content = ""
     try:
-        content = open(path)
-        content = open(path, "r", encoding="utf-8").read().encode("utf-8")
-        md5 = hashlib.md5(content).hexdigest()
-    except Exception as e:
-        md5 = str(random.randint(1000, 9999))
-        raise e
-
+        ##### debug ####
+        # s = "1"
+        # f = open(path, "r")
+        # s = "2"
+        # content = f.read()
+        # s = "3"
+        # content = content.encode("utf-8")
+        # s="4"
+        # md5 = hashlib.md5(content).hexdigest()
+        # s = "5"
+        content = open(path, encoding="utf-8").read().encode("utf-8")
+    except UnicodeDecodeError:
+        content = open(path, encoding="gbk").read().encode("utf-8")
+    # except Exception as e:
+    #     raise e
+        # raise e
+    else:
+        content = str(path).encode("utf-8")
+        # return "something happend"
+        
+    md5 = hashlib.md5(content).hexdigest()
         
     return md5
 
@@ -135,13 +149,19 @@ def matching():
         # os.popen(cmd)
 
         dir_name = gen_dir_name(pathA, pathB)
-        #判断目录是否存在/如果说目录已经存在 那么曾经计算过,直接可视化， 否则进行图匹配
+        #判断目录是否存在/如果说目录已经存在并且文件目录中的ressult.txt大于0kb 那么曾经计算过,直接可视化， 
+        #否则进行图匹配程序
         # f = open("log.txt", "a")
         # f.write(app.config["RESULT_DIR"] + "/" + dir_name + "\n")
         # f.close()
-        if os.path.isdir(app.config["RESULT_DIR"] + "/" + dir_name):
-
-            return render_template("viz.html", graphA="", graphB="", result="")
+        user_dir = os.path.join(app.config["RESULT_DIR"], dir_name)
+        if os.path.isdir(user_dir):
+            if os.path.exists(os.path.join(user_dir, "result.txt")) and os.path.getsize(os.path.join(user_dir, "result.txt")) > 0:
+                return render_template("viz.html")
+            else:
+                #说明还没计算完
+                flash("It seems not matching done!")
+                return render_template("result.html")
         else:
             #在result目录下，创建新目录
             worked_dir = app.config["RESULT_DIR"] + "/" +dir_name
@@ -176,10 +196,16 @@ def general(source, match):
     return jsonify(elements=elements)
 @app.route('/result')
 def result():
-    files_list = os.listdir(app.config['EXE_PATH'])
+    files_list = []
+    worked_dir = request.cookies.get("worked_dir")
+    if worked_dir:
+        files_list = os.listdir(worked_dir)
     return render_template('result.html', files_list=files_list)
 
 def __stamp2datetime(timestamp):
+    '''
+    #装换时间
+    '''
     try:  
         d = datetime.datetime.fromtimestamp(timestamp)  
         str1 = d.strftime("%Y-%m-%d %H:%M:%S")  
@@ -189,6 +215,9 @@ def __stamp2datetime(timestamp):
         print(e)
         return ''
 def __convert_size(size):
+    '''
+    #转换文件大小
+    '''
     s = ''
     if size/1024>  1024:
         s = str(size/1024) + ' M '

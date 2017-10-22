@@ -106,7 +106,7 @@
             var cy = cytoscape({
               container: document.getElementById('cc'),
               style: style,
-              layout: { name: 'concentric', fit: true },      
+              layout: { name: 'cose', fit: true },      
               elements: result.elements
             });
           }, 'json');  
