@@ -1,34 +1,50 @@
 <html>
  <head>
   {% if title %}
-  <title>GraphMatching{{ "- " + title}}</title>
+  <title>GraphMatching{{ " - " + title}}</title>
   {% else %}
   <title>GraphMatching</title>
   {% endif %}
   {% block head %}
   {% endblock %}
-
-  <style type="text/css">
-        nav {
-            background-color: #666;
-        }
-        nav ul li {
-            text-decoration: none;
-        }
-  </style>
-
+  <link rel="stylesheet" type="text/css" href="/static/css/style.css">
  </head>
  <body>
-   <nav>
-        <ul>
-            <li><a href="/upload">Upload</a></li>
-            <li><a href="/manage">Manage</a></li>
-            <li><a href="/matching">Matching</a></li>
-            <li><a href="/result">Result</a></li>
-            <li><a href="/viz">Visualizion</a></li>
-        </ul>
-    </nav>
+   <div class="header">
+        <div class="header-left">
+            <a id="logo" href="/">
+                <div class="logo">
+                    <img src=""/>    
+                </div>
+                    <span class="logo-text">GraphMatching</span>
+            </a>
+        </div>
+        <div class="header-right">
+            <ul>
+                <li><a href="/upload">Upload</a></li>
+                <li><a href="/manage">Manage</a></li>
+                <li><a href="/matching">Matching</a></li>
+                <li><a href="/result">Result</a></li>
+                <li><a href="/viz">Visualizion</a></li>
+            </ul>
+       </div>
+
+   </div>
+   <div class="flash-zone">
+    {% with messages = get_flashed_messages() %}
+    {% if messages %}
+      <ul class=flashes>
+      {% for message in messages %}
+        <li>{{ message }}</li>
+      {% endfor %}
+      </ul>
+    {% endif %}
+    {% endwith %}
+   </div>     
+   <div class="main">
     {% block content %}
     {% endblock %}
+   </div>
+
  </body>
 </html>
