@@ -1,0 +1,57 @@
+body {
+    font-size: 24px;
+    background-color: #888;
+    margin: 0px;
+    padding: 0px;
+}
+.header {
+    display: inline-block;
+    width: 100%;
+    background-color: #333;
+}
+.header-left {
+    color: white;
+    text-decoration: none;
+    float: left;
+}
+#logo{
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+
+.header ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    float: right;
+}
+ 
+.header .header-right ul li {
+    float: left;
+}
+ 
+.header ul li a {
+    display: block;
+    color: white;
+    text-align: center;
+    padding: 14px 16px;
+    text-decoration: none;
+}
+/* 
+.header-left {
+    float: left;
+    width: 20%;
+}
+.header .header-right {
+    float: right;
+    width: 80%;
+}
+.header-right ul li {
+    text-decoration: none;
+}
+
+*/

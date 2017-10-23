@@ -1,6 +1,6 @@
 from itertools import islice
 import os
-
+from collections import Counter
 
 def getGraph(path):
     with open(path) as f:
@@ -34,7 +34,71 @@ def getGraph(path):
             splits = []
 
     return graph
+def __getGraph(path):
+    edges = []
+    with open(path, "r", encoding="utf-8") as f:
+        for line in f:
+            splits = line.split()
+            if len(splits) == 2:
+                edges.append([splits[0], splits[1]])
 
+    return edges
+
+def __get_nodes_edges(edge_list, owners, count_dict):
+    edges = []
+    nodes = set()
+    for s, t in edge_list:
+        nodes.add(s)
+        nodes.add(t)
+        edges.append({"data":{"source":owners+str(s), "target": owners+str(t), "type":owners}})
+    # print(len(nodes))
+    nodes = list(nodes)
+    # print(len(nodes))
+    nodes.sort()
+    # print(len(nodes))
+    json_nodes = []
+    for node in nodes:
+        mdgree = count_dict.get(str(node))
+        if not mdgree:
+            mdgree = 0
+        json_nodes.append({"data":{"id":owners+str(node),"type": str(owners), "mdgree": int(mdgree)}})
+    return (json_nodes, edges)
+def __get_matched_edges(edge_list):
+    edges = []
+    e_a = []
+    e_b = []
+    #应该在这里优化一下  循环的同时进行计数
+    for s, t in edge_list:
+        e_a.append(str(s))
+        e_b.append(str(t))
+        edges.append({"data":{"source":"ga"+str(s), "target": "gb"+str(t), "type": "matched"}})
+    count_a = Counter(e_a)
+    count_b = Counter(e_b)
+    return (edges, count_a, count_b)
+def getFullGraph(ga, gb=None, match=None):
+    path_a = r"C:\Users\Shawn\Desktop\flask-graph-matching-viz\example\upload\graphA.txt"
+    path_b = r"C:\Users\Shawn\Desktop\flask-graph-matching-viz\example\upload\graphB.txt"
+    path_m = r"C:\Users\Shawn\Desktop\flask-graph-matching-viz\example\upload\match.txt"
+    #先从匹配边中把匹配节点的度计算出来
+    gm = __getGraph(path_m)
+    ga = __getGraph(path_a)
+    gb = __getGraph(path_b)
+ 
+    nodes = set()
+    edges = []
+    res_m, count_a, count_b = __get_matched_edges(__getGraph(path_m))
+    res_a = __get_nodes_edges(__getGraph(path_a), "ga", count_a)
+    res_b = __get_nodes_edges(__getGraph(path_a), "gb", count_b)
+    
+    result = dict()
+    result["nodes"] = res_a[0] + res_b[0]
+    result["edges"] = res_a[1] + res_b[1] + res_m
+
+    # print(result)
+    return result
+    # print(ga)
+    # print(gb)
+    # print(gm)
 def getNodePairs(mpath, graph):
 
     with open(mpath) as m:
@@ -105,7 +169,7 @@ if __name__ == '__main__':
     #     f.write(s)
     # print(s[:100])
 
-    test("./data/graphA.txt", "./data/match.txt")
+    # test("./data/graphA.txt", "./data/match.txt")
     # test("./data/myA.txt", "./data/mymatch.txt")
-
+    getFullGraph("")
     pass

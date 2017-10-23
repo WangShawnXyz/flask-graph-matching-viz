@@ -176,9 +176,13 @@ def general(source, match):
     return jsonify(elements=elements)
 @app.route('/result')
 def result():
-    files_list = os.listdir(app.config['EXE_PATH'])
-    return render_template('result.html', files_list=files_list)
-
+    worked_dir = request.cookies.get("worked_dir")
+    if worked_dir:
+        files_list = os.listdir(worked_dir)
+        return render_template('result.html', files_list=files_list)
+    else:
+        flash("Please marke sure you have uploaded your graph file and matched it.")
+        return redirect("/upload")
 def __stamp2datetime(timestamp):
     try:  
         d = datetime.datetime.fromtimestamp(timestamp)  
@@ -230,6 +234,10 @@ def download(filename):
 def viz():
 
     return render_template('viz.html')
+@app.route("/gettest")
+def gettest():
+    elements = g.getFullGraph("")
+    return jsonify(elements=elements)
 
 if __name__ == '__main__':
     # print(os.getcwd())
